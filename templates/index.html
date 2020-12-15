@@ -13,11 +13,11 @@
         <input type="text" id="description" name="description" />
         <input type="submit" value="Create" />
       </form>
-        <ul>
-            {% for d in data %}
-            <li>{{ d.description }}</li>
-            {% endfor %}
-        </ul>
+      <ul>
+        {% for d in data %}
+        <li>{{ d.description }}</li>
+        {% endfor %}
+      </ul>
       <script>
       const descInput = document.getElementById('description');
         document.getElementById('form').onsubmit = function(e) {

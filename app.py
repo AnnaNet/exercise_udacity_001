@@ -1,18 +1,22 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
-import sys
+from flask_migrate import Migrate
+#import sys
 
 app = Flask(__name__)
-app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://anna@localhost:5432/todoapp'
+app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://anna@localhost:5432/todonew'
 db = SQLAlchemy(app)
+
+migrate = Migrate(app, db)
 
 class Todo(db.Model):
     __tablename__ = 'todos'
     id = db.Column(db.Integer, primary_key=True)
     description = db.Column(db.String(), nullable=False)
+    comleted = db.Column(db.Boolean, nullable=True, default=True)
 
     def __repr__(self):
-        return f'<Todo {self.id} {self.description}>'
+        return '<Todo {self.id} {self.description}>'
 
 db.create_all()
 
@@ -21,7 +25,7 @@ def create_todo():
     error = False
     body = {}
     try:
-        description = request.form.get_json()['description']
+        description = request.get_json()['description']
         todo = Todo(description=description)
         db.session.add(todo)
         db.session.commit()
