@@ -16,7 +16,7 @@ class Todo(db.Model):
     comleted = db.Column(db.Boolean, nullable=True, default=True)
 
     def __repr__(self):
-        return '<Todo {self.id} {self.description}>'
+        return '<Todo {self.id} {self.description} {self.completed}>'
 
 db.create_all()
 
@@ -37,12 +37,16 @@ def create_todo():
     finally:
         db.session.close()
     if error:
+        abort (400)
+    else:
         return jsonify(body)
 
 @app.route('/')
 def index():
-    return render_template('index.html', data=Todo.query.all()
-    )
+    data=Todo.query.all()
+    print (data)
+
+    return render_template('index.html', data=Todo.query.all())
 
 # if __name__ == '__main__':
     # app.run(
