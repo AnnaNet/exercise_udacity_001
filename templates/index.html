@@ -1,16 +1,16 @@
 <html>
-    <head>
-        <title>Todo App</title>
-        <style>
-          #error {
-            display: none;
-          }
-          ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-          }
-        </style>
+  <head>
+    <title>Todo App</title>
+    <style>
+      #error {
+        display: none;
+      }
+      ul {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+      }
+    </style>
     </head>
     <body>
       <div id="error" class="hidden">Something went wrong!</div>
@@ -69,17 +69,32 @@
 
             .then(response => response.json())
             .then(jsonResponse => {
-              console.log('response', jsonResponse);
               li = document.createElement('li');
-              li.innerText = desc;
+              //li.innerText = desc;
+              const checkbox = document.createElement('input');
+              checkbox.className = 'check-completed';
+              checkbox.type = 'checkbox';
+              checkbox.setAttribute('data-id', jsonResponse.id);
+              li.appendChild(checkbox);
+
+              const text = document.createTextNode(' ' + jsonResponse.description);
+              li.appendChild(text);
+
+              const deleteBtn = document.createElement('button');
+              deleteBtn.className = 'delete-button';
+              deleteBtn.setAttribute('data-id', jsonResponse.id);
+              deleteBtn.innerHTML = '&cross;';
+              li.appendChild(deleteBtn);
+
               document.getElementById('todos').appendChild(li);
               document.getElementById('error').className = 'hidden';
             })
 
             .catch(function() {
+              console.error('Error occurred');
               document.getElementById('error').className = '';
             })
           }
-        </script>
-    </body>
+    </script>
+  </body>
 </html>

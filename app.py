@@ -26,9 +26,11 @@ def create_todo():
     body = {}
     try:
         description = request.get_json()['description']
-        todo = Todo(description=description)
+        todo = Todo(description=description, completed=False)
         db.session.add(todo)
         db.session.commit()
+        body['id'] = todo.id
+        body['completed'] = todo.completed
         body['description'] = todo.description
     except:
         error = True
@@ -41,23 +43,23 @@ def create_todo():
     else:
         return jsonify(body)
 
-    @app.route('/todos/<todo_id>/set-completed', methods=['POST'])
-    def set_completed_todo(todo_id):
-      try:
+@app.route('/todos/<todo_id>/set-completed', methods=['POST'])
+def set_completed_todo(todo_id):
+    try:
         completed = request.get_json()['completed']
         print('completed', completed)
         todo = Todo.query.get(todo_id)
         todo.completed = completed
         db.session.commit()
-      except:
+    except:
         db.session.rollback()
-      finally:
+    finally:
         db.session.close()
-      if error:
+    return redirect(url_for('index'))
+    if error:
         abort (400)
-      else:
+    else:
         return jsonify(body)
-      return redirect(url_for('index'))
 
 @app.route('/')
 def index():
