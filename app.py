@@ -48,9 +48,6 @@ def create_todo():
 def delete_todo():
     try:
         todo = Todo.query.get(todo_id)
-        db.session.delete(todo)
-        Todo.query.filter_by(id=todo_id).delete()
-        db.session.commit()
 
     except:
         db.session.rollback()
