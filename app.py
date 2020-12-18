@@ -43,6 +43,19 @@ def create_todo():
     else:
         return jsonify(body)
 
+
+@app.route('/todos/<todo_id>/delete', methods=['POST'])
+def delete_todo():
+    try:
+        todo = Todo.query.get(todo_id)
+
+    except:
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if error:
+        abort (400)
+
 @app.route('/todos/<todo_id>/set-completed', methods=['POST'])
 def set_completed_todo(todo_id):
     try:
