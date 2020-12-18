@@ -21,8 +21,8 @@
       <ul id="todos">
         {% for d in data %}
         <li>
-          <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if d.completed %} checked {% endif %}/>
-          {{ todo.description }}
+          <input class="check-completed" data-id="{{ d.id }}" type="checkbox" {% if d.completed %} checked {% endif %}/>
+          {{ d.description }}
         </li>
         {% endfor %}
       </ul>
