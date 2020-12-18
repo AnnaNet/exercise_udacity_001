@@ -1,7 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for, abort, jsonify
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
-#import sys
+import sys
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_DATABASE_URI'] = 'postgres://anna@localhost:5432/todonew'
@@ -56,17 +56,10 @@ def set_completed_todo(todo_id):
     finally:
         db.session.close()
     return redirect(url_for('index'))
-    if error:
-        abort (400)
-    else:
-        return jsonify(body)
 
 @app.route('/')
 def index():
-    data=Todo.query.all()
-    print (data)
-
-    return render_template('index.html', data=Todo.query.all())
+    return render_template('index.html', todos=Todo.query.order_by('id').all())
 
 # if __name__ == '__main__':
     # app.run(
