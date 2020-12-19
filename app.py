@@ -16,9 +16,9 @@ class Todo(db.Model):
     completed = db.Column(db.Boolean, nullable=True, default=True)
 
     def __repr__(self):
-        return '<Todo {self.id} {self.description} {self.completed}>'
+        return f'<Todo {self.id} {self.description}>'
 
-db.create_all()
+#db.create_all()
 
 @app.route('/todos/create', methods=['POST'])
 def create_todo():
