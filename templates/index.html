@@ -9,6 +9,14 @@
         list-style: none;
         padding: 0;
         margin: 0;
+        width: 250px;
+      }
+      .btn_del {
+        float: left;
+        border: none;
+        outline: none;
+        color: red;
+
       }
     </style>
   </head>
@@ -22,11 +30,27 @@
         {% for todo in todos %}
         <li>
           <input class="check-completed" data-id="{{ todo.id }}" type="checkbox" {% if todo.completed %} checked {% endif %}/>
-        {{ todo.description }}
+          {{ todo.description }}
+          <button class="delete-button" data-id="{{ todo.id }}">&cross;</button>
         </li>
         {% endfor %}
       </ul>
       <script>
+        const deleteBtns = document.querySelectorAll('.delete-button');
+        for (let i = 0; i < deleteBtns.length; i++) {
+          const btn = deleteBtns[i];
+          btn.onclick = function(e) {
+            const todoId = e.target.dataset['id'];
+            fetch('/todos/' + todoId, {
+              method: 'DELETE'
+            })
+            .then(function() {
+              const item = e.target.parentElement;
+              item.remove();
+            })
+          }
+        }
+
         const checkboxes = document.querySelectorAll('.check-completed');
         for (let i = 0; i < checkboxes.length; i++) {
           const checkbox = checkboxes[i];
@@ -78,11 +102,11 @@
               const text = document.createTextNode(' ' + jsonResponse.description);
               li.appendChild(text);
 
-//              const deleteBtn = document.createElement('button');
-  //            deleteBtn.className = 'delete-button';
-    //          deleteBtn.setAttribute('data-id', jsonResponse.id);
-      //        deleteBtn.innerHTML = '&cross;';
-        //      li.appendChild(deleteBtn);
+              const deleteBtn = document.createElement('button');
+              deleteBtn.className = 'delete-button';
+              deleteBtn.setAttribute('data-id', jsonResponse.id);
+              deleteBtn.innerHTML = '&cross;';
+              li.appendChild(deleteBtn);
 
               document.getElementById('todos').appendChild(li);
               document.getElementById('error').className = 'hidden';
